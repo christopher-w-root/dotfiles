@@ -1,0 +1,82 @@
+#!/bin/bash
+
+# bash_prompt
+
+# add this script for git-related stuff in the prompt
+source ~/.git-prompt.sh
+
+set_prompts() {
+    local black=""
+    local blue=""
+    local bold=""
+    local cyan=""
+    local green=""
+    local orange=""
+    local purple=""
+    local red=""
+    local reset=""
+    local white=""
+    local yellow=""
+    local boldred=""
+
+    local hostStyle=""
+    local userStyle=""
+
+    # Solarized colors
+    # (https://github.com/altercation/solarized/tree/master/iterm2-colors-solarized#the-values)
+    reset="\e[0m"
+    black="\e[38;5;235m"
+    blue="\e[38;5;33m"
+    cyan="\e[38;5;37m"
+    #green="\e[38;5;64m"
+    green="\e[38;5;34m"
+    #green="\e[38;5;64m"
+    orange="\e[38;5;166m"
+    #purple="\e[38;5;125m"
+    purple="\e[38;5;213m"
+    #red="\e[38;5;124m"
+    red="\e[38;5;160m"
+    #white="\e[38;5;254m"
+    white="\e[38;5;245m"
+    #yellow="\e[38;5;136m"
+    yellow="\e[38;5;178m"
+    #boldred="\e[1;38;5;124m"
+    boldred="\e[1;38;5;160m"
+
+
+    # build the prompt
+
+    # logged in as root
+    if [[ "$USER" == "root" ]]; then
+        userStyle=$boldred
+    else
+        userStyle=$orange
+    fi
+
+    # connected via ssh
+    if [[ "$SSH_TTY" ]]; then
+        hostStyle=$boldred
+    else
+        hostStyle=$yellow
+    fi
+
+    # set the terminal title to the current working directory
+    PS1=""
+    #PS1="\[\033]0;\w\007\]"
+
+    PS1+="\n" # newline
+    PS1+="\[$userStyle\]\u" # username
+    PS1+="\[$white\]@"
+    PS1+="\[$hostStyle\]\h" # host
+    PS1+="\[$white\]: "
+    PS1+="\[$green\]\w" # working directory
+    PS1+="\[$cyan\]\$(__git_ps1)"
+    PS1+="\n"
+    PS1+="\[$purple\][\D{%D %T}] " # time
+    PS1+="\[$black\]\$ \[$reset\]"
+
+    export PS1
+}
+
+set_prompts
+unset set_prompts
